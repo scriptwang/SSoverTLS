@@ -183,8 +183,6 @@ function define_var(){
     export nginxip=172.18.0.2
     export ssip=172.18.0.3
     export ssport=8388
-    export ssmethod=chacha20-ietf-poly1305
-    echo '设置shadowsocks加密方式为 '${ssmethod}
 }
 
 
@@ -205,7 +203,6 @@ function input_domain(){
 
 function input_v2rayPath(){
     read -p "请输入v2ray路径：" inputpath
-    # 定义域名
     if [[ "$inputpath" == "" ]];then
         echo 'v2ray路径不能为空！脚本退出！'
     fi
@@ -216,12 +213,21 @@ function input_v2rayPath(){
 
 function input_sspwd(){
     read -p "请输入shadowsocks密码：" inputsspwd
-    # 定义域名
     if [[ "$inputsspwd" == "" ]];then
         echo 'shadowsocks密码不能为空！脚本退出！'
     fi
     export sspwd=$inputsspwd
-    echo '设置shadowsocks密码为 '${inputsspwd}
+    echo '设置shadowsocks密码为 '${sspwd}
+}
+
+
+function input_ssmethod(){
+    read -p "请输入shadowsocks加密方式：" inputssmethod
+    if [[ "$inputssmethod" == "" ]];then
+        echo 'shadowsocks加密方式不能为空！脚本退出！'
+    fi
+    export ssmethod=$inputssmethod
+    echo '设置shadowsocks加密方式为 '${ssmethod}
 }
 
 
@@ -300,6 +306,7 @@ function install(){
     input_domain
     input_v2rayPath
     input_sspwd
+    input_ssmethod
     init_website
     define_var
     echo "安装所需工具中 docker/zip/unzip/wget/ifconfig..."
