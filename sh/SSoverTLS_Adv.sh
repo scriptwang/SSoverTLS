@@ -56,6 +56,27 @@ function get_random_webs(){
     "http://down.cssmoban.com/cssthemes6/cpts_1845_dcy.zip"
     "http://down.cssmoban.com/cssthemes6/tlip_5_material-app.zip"
     "http://down.cssmoban.com/cssthemes6/tlip_10_wedding.zip"
+    "http://down.cssmoban.com/cssthemes6/quar_2_atlantis.zip"
+    "http://down.cssmoban.com/cssthemes5/tope_11_steak.zip"
+    "http://down.cssmoban.com/cssthemes1/azmind_1_xb.zip"
+    "http://down.cssmoban.com/cssthemes4/ft5_67_simple.zip"
+    "http://down.cssmoban.com/cssthemes3/dgfp_27_hm.zip"
+    "http://down.cssmoban.com/cssthemes/frt_26.zip"
+    "http://down.cssmoban.com/cssthemes1/ftmp_135_up.zip"
+    "http://down.cssmoban.com/cssthemes6/mdbo_14_Landing-Page.zip"
+    "http://down.cssmoban.com/cssthemes6/tmag_23_Infinity.zip"
+    "http://down.cssmoban.com/cssthemes6/zero_39_zPinPin.zip"
+    "http://down.cssmoban.com/cssthemes3/cpts_137_elv.zip"
+    "http://down.cssmoban.com/cssthemes6/zero_50_zAnimal.zip"
+    "http://down.cssmoban.com/cssthemes2/dgfp_12_cvh.zip"
+    "http://down.cssmoban.com/cssthemes3/sbtp_2_fb.zip"
+    "http://down.cssmoban.com/cssthemes3/npts_10_cvl.zip"
+    "http://down.cssmoban.com/cssthemes1/ftmp_24.zip"
+    "http://down.cssmoban.com/cssthemes4/dstp_28_P2.zip"
+    "http://down.cssmoban.com/cssthemes5/tpmo_520_highway.zip"
+    "http://down.cssmoban.com/cssthemes5/twts_168_awesplash.zip"
+    "http://down.cssmoban.com/cssthemes6/wsdp_7_edge.zip"
+    "http://down.cssmoban.com/cssthemes3/mstp_89_rock4life.zip"
     )
     RANDOM=$$$(date +%s)
     rand=$[$RANDOM % ${#webs[@]}]
@@ -352,9 +373,7 @@ function install(){
 
 
 function update_website(){
-    # 定义站点模板
-    export website=$(get_random_webs)
-    echo '设置站点模板为 '${website}
+    init_website
     add_website 2>/dev/null
     echo '设置完毕！'
 }
