@@ -193,6 +193,8 @@ function domain_register(){
 function add_website(){
     # 设置站点模板
     path=/usr/share/nginx/html/
+    # 删除原来的文件
+    rm -rf ${path}*
     # 取出文件名
     filename=$(basename $website .zip)
     # 下载解压
@@ -301,7 +303,10 @@ EOF
 
 
 function print_help(){
-    echo "帮助信息:"
+    echo '帮助信息:'
+    echo ' -h 打印本信息'
+    echo ' -i 安装'
+    echo ' -w 更新伪装站点'
     echo "默认分享链接:"${share}
 }
 
@@ -357,10 +362,13 @@ function update_website(){
 
 # 调用入口
 if [[ "$1" == "-h" ]];then
+    # 帮助
     print_help
 elif [[ "$1" == "-i" ]];then
+    # 安装
     install
 elif [[ "$1" == "-w" ]];then
+    # 更新伪站
     update_website
 else
     echo "没有这个选项${1}"
