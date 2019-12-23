@@ -22,6 +22,46 @@ function urlencode() {
 done
 }
 
+function get_random_webs(){
+    webs=(
+    "http://down.cssmoban.com/cssthemes6/sstp_7_Kairos.zip"
+    "http://down.cssmoban.com/cssthemes6/foun_8_Sinclair.zip"
+    "http://down.cssmoban.com/cssthemes6/tmag_23_Infinity.zip"
+    "http://down.cssmoban.com/cssthemes6/dash_1_simple.zip"
+    "http://down.cssmoban.com/cssthemes6/inva_2_evolo.zip"
+    "http://down.cssmoban.com/cssthemes6/oplv_9_stage.zip"
+    "http://down.cssmoban.com/cssthemes6/oplv_2_html5updimension.zip"
+    "http://down.cssmoban.com/cssthemes6/bpus_10_showtracker.zip"
+    "http://down.cssmoban.com/cssthemes6/sstp_9_Typerite.zip"
+    "http://down.cssmoban.com/cssthemes6/resu_1_designer-Portfolio.zip"
+    "http://down.cssmoban.com/cssthemes6/wsdp_30_invictus.zip"
+    "http://down.cssmoban.com/cssthemes6/zero_57_zMatcha.zip"
+    "http://down.cssmoban.com/cssthemes6/zero_54_zHarvest.zip"
+    "http://down.cssmoban.com/cssthemes6/zero_38_zPhotoGrap.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1927_dag.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1913_daq.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1893_dem.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1876_czx.zip"
+    "http://down.cssmoban.com/cssthemes6/wsdp_20_union.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1873_cyq.zip"
+    "http://down.cssmoban.com/cssthemes6/wsdp_11_lambda.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1861_cto.zip"
+    "http://down.cssmoban.com/cssthemes6/fish_30_rapoo.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1796_cvc.zip"
+    "http://down.cssmoban.com/cssthemes6/zero_21_zCreative.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1807_cti.zip"
+    "http://down.cssmoban.com/cssthemes6/mzth_14_unicorn.zip"
+    "http://down.cssmoban.com/cssthemes6/crui_1_agnes.zip"
+    "http://down.cssmoban.com/cssthemes6/crui_3_ava.zip"
+    "http://down.cssmoban.com/cssthemes6/cpts_1845_dcy.zip"
+    "http://down.cssmoban.com/cssthemes6/tlip_5_material-app.zip"
+    "http://down.cssmoban.com/cssthemes6/tlip_10_wedding.zip"
+    )
+    RANDOM=$$$(date +%s)
+    rand=$[$RANDOM % ${#webs[@]}]
+    echo ${webs[$rand]}
+}
+
 # echo $(gen_ss_link_new $ssmethod $sspwd $domain 443 $v2rayPath $(urlencode 中文))
 function gen_ss_link_new(){
     enc=$1
@@ -202,9 +242,9 @@ function input_domain(){
 
 
 function input_v2rayPath(){
-    read -p "请输入v2ray路径：" inputpath
+    read -p "请输入v2ray路径(输入为空则随机生成)：" inputpath
     if [[ "$inputpath" == "" ]];then
-        echo 'v2ray路径不能为空！脚本退出！'
+        inputpath=$(getRandomPwd 8)
     fi
     export v2rayPath=$inputpath
     echo '设置v2ray路径为 '${v2rayPath}
@@ -212,9 +252,9 @@ function input_v2rayPath(){
 
 
 function input_sspwd(){
-    read -p "请输入shadowsocks密码：" inputsspwd
+    read -p "请输入shadowsocks密码(输入为空则随机生成)：" inputsspwd
     if [[ "$inputsspwd" == "" ]];then
-        echo 'shadowsocks密码不能为空！脚本退出！'
+        inputsspwd=$(getRandomPwd 10)
     fi
     export sspwd=$inputsspwd
     echo '设置shadowsocks密码为 '${sspwd}
@@ -233,44 +273,8 @@ function input_ssmethod(){
 
 function init_website(){
     read -p "请输入站点模板路径(只支持后缀名为.zip的文件)，为空将随机选择站点模板(注意:不知道怎么输入直接回车即可!)：" inputweb
-    webs=(
-    "http://down.cssmoban.com/cssthemes6/sstp_7_Kairos.zip"
-    "http://down.cssmoban.com/cssthemes6/foun_8_Sinclair.zip"
-    "http://down.cssmoban.com/cssthemes6/tmag_23_Infinity.zip"
-    "http://down.cssmoban.com/cssthemes6/dash_1_simple.zip"
-    "http://down.cssmoban.com/cssthemes6/inva_2_evolo.zip"
-    "http://down.cssmoban.com/cssthemes6/oplv_9_stage.zip"
-    "http://down.cssmoban.com/cssthemes6/oplv_2_html5updimension.zip"
-    "http://down.cssmoban.com/cssthemes6/bpus_10_showtracker.zip"
-    "http://down.cssmoban.com/cssthemes6/sstp_9_Typerite.zip"
-    "http://down.cssmoban.com/cssthemes6/resu_1_designer-Portfolio.zip"
-    "http://down.cssmoban.com/cssthemes6/wsdp_30_invictus.zip"
-    "http://down.cssmoban.com/cssthemes6/zero_57_zMatcha.zip"
-    "http://down.cssmoban.com/cssthemes6/zero_54_zHarvest.zip"
-    "http://down.cssmoban.com/cssthemes6/zero_38_zPhotoGrap.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1927_dag.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1913_daq.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1893_dem.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1876_czx.zip"
-    "http://down.cssmoban.com/cssthemes6/wsdp_20_union.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1873_cyq.zip"
-    "http://down.cssmoban.com/cssthemes6/wsdp_11_lambda.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1861_cto.zip"
-    "http://down.cssmoban.com/cssthemes6/fish_30_rapoo.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1796_cvc.zip"
-    "http://down.cssmoban.com/cssthemes6/zero_21_zCreative.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1807_cti.zip"
-    "http://down.cssmoban.com/cssthemes6/mzth_14_unicorn.zip"
-    "http://down.cssmoban.com/cssthemes6/crui_1_agnes.zip"
-    "http://down.cssmoban.com/cssthemes6/crui_3_ava.zip"
-    "http://down.cssmoban.com/cssthemes6/cpts_1845_dcy.zip"
-    "http://down.cssmoban.com/cssthemes6/tlip_5_material-app.zip"
-    "http://down.cssmoban.com/cssthemes6/tlip_10_wedding.zip"
-    )
     if [[ "$inputweb" == "" ]];then
-        RANDOM=$$$(date +%s)
-        rand=$[$RANDOM % ${#webs[@]}]
-        inputweb=${webs[$rand]}
+        inputweb=$(get_random_webs)
     fi
     # 定义站点模板
     export website=$inputweb
@@ -310,16 +314,16 @@ function install(){
     init_website
     define_var
     echo "安装所需工具中 docker/zip/unzip/wget/ifconfig..."
-    install_tools 2 > /dev/null
+    install_tools 2>/dev/null
 
     echo "调整时间为东八区中..."
-    check_datetime 2 > /dev/null
+    check_datetime 2>/dev/null
 
     echo "添加网络中..."
-    add_mynet 2 > /dev/null
+    add_mynet 2>/dev/null
 
     echo "添加Nginx容器中..."
-    add_ngx 2 > /dev/null
+    add_ngx 2>/dev/null
 
     echo "认证域名开始..."
     sleep 2
@@ -327,7 +331,7 @@ function install(){
     echo "认证域名成功..."
 
     echo "添加站点模板中..."
-    add_website 2 > /dev/null
+    add_website 2>/dev/null
     echo "添加站点模板成功!"
 
     echo "添加shadowsocks容器中..."
@@ -342,12 +346,22 @@ function install(){
 }
 
 
+function update_website(){
+    # 定义站点模板
+    export website=$(get_random_webs)
+    echo '设置站点模板为 '${website}
+    add_website 2>/dev/null
+    echo '设置完毕！'
+}
+
 
 # 调用入口
 if [[ "$1" == "-h" ]];then
     print_help
 elif [[ "$1" == "-i" ]];then
     install
+elif [[ "$1" == "-w" ]];then
+    update_website
 else
     echo "没有这个选项${1}"
 fi
