@@ -171,18 +171,6 @@ function add_path(){
 }
 
 
-function add_mynet(){
-    # 先清除所有使用该网络的容器才能删除该网络
-    docker stop ngx 2>/dev/null
-    docker rm ngx 2>/dev/null
-    docker stop ss 2>/dev/null
-    docker rm ss 2>/dev/null
-    docker network rm mynet 2>/dev/null
-    # 创建网络
-    docker network create --subnet=172.18.0.0/16 mynet
-}
-
-
 function add_ngx(){
     # 清理一些资源，避免重复创建出现问题
     rm -rf /etc/letsencrypt
@@ -192,7 +180,6 @@ function add_ngx(){
     docker rm ngx 2>/dev/null
     # 创建ngx容器
     docker run --name ngx \
-    --network mynet --ip ${nginxip} \
     --restart=always \
     -e v2rayPath=$v2rayPath \
     -e domain=$domain \
@@ -230,7 +217,6 @@ function add_ss(){
     docker rm ss 2>/dev/null
     # 设置带有v2ray插件的shadowsocks
     docker run -d \
-    --network mynet --ip ${ssip} \
     --name ss \
     --restart=always \
     -e "ARGS=--plugin v2ray-plugin --plugin-opts server;path=/$v2rayPath;loglevel=none" \
@@ -238,13 +224,15 @@ function add_ss(){
     -e SERVER_PORT=$ssport \
     -e METHOD=$ssmethod \
     -v /etc/localtime:/etc/localtime \
-    acrisliu/shadowsocks-libev 2>/dev/null
+    kimoqi/ssv2ray 2>/dev/null
+    
+    # 获取ss容器的内网ip
+    export ssip=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'  ss`
 }
 
 
 function define_var(){
-    export nginxip=172.18.0.2
-    export ssip=172.18.0.3
+    # ss使用端口，内网使用，保持默认即可
     export ssport=8388
 }
 
@@ -267,7 +255,7 @@ function input_domain(){
 function input_v2rayPath(){
     read -p "请输入v2ray路径(输入为空则随机生成)：" inputpath
     if [[ "$inputpath" == "" ]];then
-        inputpath=$(getRandomPwd 8)
+        inputpath=$(getRandomPwd 20)
     fi
     export v2rayPath=$inputpath
     echo '设置v2ray路径为 '${v2rayPath}
@@ -277,7 +265,7 @@ function input_v2rayPath(){
 function input_sspwd(){
     read -p "请输入shadowsocks密码(输入为空则随机生成)：" inputsspwd
     if [[ "$inputsspwd" == "" ]];then
-        inputsspwd=$(getRandomPwd 10)
+        inputsspwd=$(getRandomPwd 16)
     fi
     export sspwd=$inputsspwd
     echo '设置shadowsocks密码为 '${sspwd}
@@ -285,9 +273,9 @@ function input_sspwd(){
 
 
 function input_ssmethod(){
-    read -p "请输入shadowsocks加密方式：" inputssmethod
+    read -p "请输入shadowsocks加密方式(输入为空则默认为chacha20-ietf-poly1305，请务必输入ss支持的加密方式！)：" inputssmethod
     if [[ "$inputssmethod" == "" ]];then
-        echo 'shadowsocks加密方式不能为空！脚本退出！'
+        inputssmethod=chacha20-ietf-poly1305
     fi
     export ssmethod=$inputssmethod
     echo '设置shadowsocks加密方式为 '${ssmethod}
@@ -316,7 +304,6 @@ export ssmethod=${ssmethod}
 export website=${website}
 export share=${share}
 
-
 EOF
 . ~/.bashrc
 }
@@ -344,9 +331,9 @@ function install(){
 
     echo "调整时间为东八区中..."
     check_datetime 2>/dev/null
-
-    echo "添加网络中..."
-    add_mynet 2>/dev/null
+    
+    echo "添加shadowsocks容器中..."
+    add_ss
 
     echo "添加Nginx容器中..."
     add_ngx 2>/dev/null
@@ -359,9 +346,6 @@ function install(){
     echo "添加站点模板中..."
     add_website 2>/dev/null
     echo "添加站点模板成功!"
-
-    echo "添加shadowsocks容器中..."
-    add_ss
 
     print_help
 
