@@ -273,7 +273,7 @@ function input_sspwd(){
 
 
 function input_ssmethod(){
-    read -p "请输入shadowsocks加密方式(输入为空则默认为chacha20-ietf-poly1305，请务必输入ss支持的加密方式！)：" inputssmethod
+    read -p "请输入shadowsocks加密方式(输入为空则默认为chacha20-ietf-poly1305，请务必输入ss支持的加密方式，否则连接不上！)：" inputssmethod
     if [[ "$inputssmethod" == "" ]];then
         inputssmethod=chacha20-ietf-poly1305
     fi
