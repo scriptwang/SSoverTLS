@@ -27,6 +27,19 @@ function get_ip_from_domain(){
     echo ${IP}
 }
 
+# 获取本机ip
+function getIp(){
+    name=""
+    if [ $# -ne 0 ];then
+        name=$1
+    fi
+    # install ifconfig
+    hash ifconfig 2>/dev/null || {
+        yum -y install net-tools 2 > /dev/null
+    }
+    r=`ifconfig $name | grep "inet.*broadcast.*" | cut -d' ' -f10`
+    echo $r
+}
 
 # 输入域名
 function input_domain(){

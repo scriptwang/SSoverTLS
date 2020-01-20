@@ -15,6 +15,12 @@ bash <(curl https://raw.githubusercontent.com/scriptwang/SSoverTLS/master/sh/SSo
 bash <(curl https://raw.githubusercontent.com/scriptwang/SSoverTLS/master/sh/SSoverTLS_Adv.sh) -w
 ```
 
+## 认证新域名
+需要在安装之后认证
+```
+bash <(curl https://raw.githubusercontent.com/scriptwang/SSoverTLS/master/sh/AddDomain.sh)
+```
+
 ## 客户端
 - 安卓：[小飞机](https://github.com/shadowsocks/shadowsocks-android/releases)加[v兔瑞插件](https://github.com/shadowsocks/v2ray-plugin-android/releases)
 - PC：[小飞机](https://github.com/shadowsocks/shadowsocks-windows/releases)加[v兔瑞插件](https://github.com/shadowsocks/v2ray-plugin/releases)(将v兔瑞-plugin.exe下载改名为v兔瑞.exe放到酸酸文件夹里，谐音请自动转换)
