@@ -101,16 +101,18 @@ function gen_ss_link_new(){
 
 # 获取ip
 function getIp(){
-    name=""
-    if [ $# -ne 0 ];then
-        name=$1
-    fi
-    # install ifconfig
-    hash ifconfig 2>/dev/null || {
-        yum -y install net-tools 2 > /dev/null
-    }
-    r=`ifconfig $name | grep "inet.*broadcast.*" | cut -d' ' -f10`
-    echo $r
+    echo `curl ifconfig.me`
+    
+    # 如果上面的方法失效，请放开下面的方法，用ifconfig获取外网ip（不一定准确）
+    #name=""
+    #if [ $# -ne 0 ];then
+    #   name=$1
+    #fi
+    #hash ifconfig 2>/dev/null || {
+    #    yum -y install net-tools 2 > /dev/null
+    #}
+    #r=`ifconfig $name | grep "inet.*broadcast.*" | cut -d' ' -f10`
+    #echo $r
 }
 
 # 从域名获取IP
