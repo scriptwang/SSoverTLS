@@ -172,6 +172,17 @@ function add_path(){
     echo ''
 }
 
+function add_mynet(){
+    # 先清除所有使用该网络的容器才能删除该网络
+    docker stop ngx 2>/dev/null
+    docker rm ngx 2>/dev/null
+    docker stop ss 2>/dev/null
+    docker rm ss 2>/dev/null
+    docker network rm mynet 2>/dev/null
+    # 创建网络
+    docker network create --subnet=172.18.0.0/16 mynet
+}
+
 
 function add_ngx(){
     # 清理一些资源，避免重复创建出现问题
@@ -182,6 +193,7 @@ function add_ngx(){
     docker rm ngx 2>/dev/null
     # 创建ngx容器
     docker run --name ngx \
+    --network mynet --ip ${nginxip} \
     --restart=always \
     -e v2rayPath=$v2rayPath \
     -e domain=$domain \
@@ -219,6 +231,7 @@ function add_ss(){
     docker rm ss 2>/dev/null
     # 设置带有v2ray插件的shadowsocks
     docker run -d \
+    --network mynet --ip ${ssip} \
     --name ss \
     --restart=always \
     -e "ARGS=--plugin v2ray-plugin --plugin-opts server;path=/$v2rayPath;loglevel=none" \
@@ -227,13 +240,12 @@ function add_ss(){
     -e METHOD=$ssmethod \
     -v /etc/localtime:/etc/localtime \
     kimoqi/ssv2ray 2>/dev/null
-    
-    # 获取ss容器的内网ip
-    export ssip=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'  ss`
 }
 
 
 function define_var(){
+    export nginxip=172.18.0.2
+    export ssip=172.18.0.3
     # ss使用端口，内网使用，保持默认即可
     export ssport=8388
 }
@@ -333,6 +345,9 @@ function install(){
 
     echo "调整时间为东八区中..."
     check_datetime 2>/dev/null
+    
+    echo "添加网络中..."
+    add_mynet 2 > /dev/null
     
     echo "添加shadowsocks容器中..."
     add_ss
